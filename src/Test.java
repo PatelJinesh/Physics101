@@ -1,17 +1,21 @@
 import events.commands.Commands;
 import events.commands.Shortcuts;
+import structures.ClipBoard;
 import structures.DrawnVector;
-import ui.components.*;
 import ui.components.JToolBar;
-import ui.dialogs.VectorInfoDialog;
+import ui.components.JVectorView;
 import ui.dialogs.DialogResult;
+import ui.dialogs.VectorInfoDialog;
 import ui.resources.Icons;
 import ui.styling.borders.ColumnHeaderBorder;
 import ui.styling.renderers.VectorListRenderer;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 
 /**
  * Name:        Jinesh Patel
@@ -254,11 +258,19 @@ public class Test extends JFrame implements ActionListener, ComponentListener {
         jmiMoveDown.setActionCommand(Commands.MOVEDOWN);
         jmiMoveUp.setActionCommand(Commands.MOVEUP);
 
+        jmiCut.setActionCommand(Commands.CUT);
+        jmiCopy.setActionCommand(Commands.COPY);
+        jmiPaste.setActionCommand(Commands.PASTE);
+
         jmiAttach.addActionListener(this);
         jmiDelete.addActionListener(this);
         jmiEdit.addActionListener(this);
         jmiMoveDown.addActionListener(this);
         jmiMoveUp.addActionListener(this);
+
+        jmiCut.addActionListener(this);
+        jmiCopy.addActionListener(this);
+        jmiPaste.addActionListener(this);
 
         //endregion
 
@@ -304,6 +316,33 @@ public class Test extends JFrame implements ActionListener, ComponentListener {
         this.setJMenuBar(menuBar);
 
         //endregion
+    }
+
+    private void cut() {
+        if (vectorsList.isSelectionEmpty())
+            return;
+
+        ClipBoard.setValue(vectors.get(vectorsList.getSelectedIndex()));
+        this.deleteVector();
+    }
+
+    private void paste() {
+        if (!(ClipBoard.getValue() instanceof DrawnVector))
+            return;
+
+        try {
+            vectors.addElement(((DrawnVector) ClipBoard.getValue()).clone());
+            vectorView.attachVector(((DrawnVector) ClipBoard.getValue()).clone());
+        } catch (CloneNotSupportedException e) {
+            return;
+        }
+    }
+
+    private void copy() {
+        if (vectorsList.isSelectionEmpty())
+            return;
+
+        ClipBoard.setValue(vectors.get(vectorsList.getSelectedIndex()));
     }
 
     private void setupToolbar() {
@@ -391,6 +430,15 @@ public class Test extends JFrame implements ActionListener, ComponentListener {
                 break;
             case Commands.MOVEDOWN:
                 this.moveDown();
+                break;
+            case Commands.CUT:
+                this.cut();
+                break;
+            case Commands.PASTE:
+                this.paste();
+                break;
+            case Commands.COPY:
+                this.copy();
                 break;
         }
     }

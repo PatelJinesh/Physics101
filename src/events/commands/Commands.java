@@ -86,4 +86,7 @@ public class Commands {
      * Action Command to change color of object.
      */
     public static final String COLOR = "COLOR";
+    public static final String CUT = "CUT";
+    public static final String COPY = "COPY";
+    public static final String PASTE = "PASTE";
 }

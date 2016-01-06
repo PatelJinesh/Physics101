@@ -6,7 +6,7 @@ package structures;
  * File:        structures.Vector.java
  * Description:
  */
-public class Vector {
+public class Vector implements Cloneable {
 
     //region Instance Variables
 
@@ -18,6 +18,11 @@ public class Vector {
      * The angle of the vector in pixel units.
      */
     protected double angle;
+
+    @Override
+    public Vector clone() throws CloneNotSupportedException {
+        return ((Vector) super.clone());
+    }
 
     //endregion
 

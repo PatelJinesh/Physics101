@@ -19,6 +19,11 @@ public class DrawnVector extends Vector {
         SUBTRACT
     }
 
+    @Override
+    public DrawnVector clone() throws CloneNotSupportedException {
+        return ((DrawnVector) super.clone());
+    }
+
     //region Instance Variables
 
     /**
